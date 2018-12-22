@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cesium</title>
+  <script src="./scripts/Cesium/Cesium.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="./scripts/Cesium/Widgets/widgets.css">
+  <style media="screen">
+    html, body{
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer" style="height:100%"></div>
+  <script type="text/javascript">
+    var geeMetadata = new Cesium.GoogleEarthEnterpriseMetadata('http://www.earthenterprise.org/3d');
+    var gee = new Cesium.GoogleEarthEnterpriseImageryProvider({
+        metadata : geeMetadata
+    });
+    var url = "http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali";
+    var google = new Cesium.UrlTemplateImageryProvider({url:url});
+
+
+    var viewer = new Cesium.Viewer("cesiumContainer", {
+      baseLayerPicker: false,
+      imageryProvider: google,
+      terrainProvider : Cesium.createWorldTerrain({
+        requestWaterMask : true,
+        requestVertexNormals : true
+      }),
+    });
+
+    // viewer.camera.setView({
+    //   //北京上空
+    //   destination : Cesium.Cartesian3.fromDegrees(116.39, 39.9, 15000000.0)
+    // });
+
+    viewer.camera.setView({
+        destination : new Cesium.Cartesian3(1332761, -4662399, 4137888),
+        orientation: {
+            heading : 0.607, // east, default value is 0.0 (north)
+            pitch : -0.666,    // default value (looking down)
+            roll : 0.0                             // default value
+        }
+    });
+
+    var city = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({ url: Cesium.IonResource.fromAssetId(3839)}));
+    var transparentStyle = new Cesium.Cesium3DTileStyle({
+        color : "color('white', 0.3)",
+        show : true
+    });
+
+    city.style = transparentStyle;
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cesium</title>
+  <script src="./scripts/Cesium/Cesium.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="./scripts/Cesium/Widgets/widgets.css">
+  <style media="screen">
+    html, body{
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+  </style>
+</head>
+<body>
+  <!-- <div id="cesiumContainer" style="height:100%"></div> -->
+  <script type="text/javascript">
+    const https = require('https');
+    const fs = require('fs');
+
+    const options = {
+      key: fs.readFileSync('test/fixtures/keys/agent2-key.pem'),
+      cert: fs.readFileSync('test/fixtures/keys/agent2-cert.pem')
+    };
+
+    https.createServer(options, (req, res) => {
+      res.writeHead(200);
+      res.end('hello world\n');
+    }).listen(8000);
+
+  </script>
+</body>
+</html>

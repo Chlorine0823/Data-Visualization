@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cesium</title>
+  <script src="./scripts/Cesium/Cesium.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="./scripts/Cesium/Widgets/widgets.css">
+  <style media="screen">
+    html, body{
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer" style="height:100%"></div>
+  <script type="text/javascript">
+    // var geeMetadata = new Cesium.GoogleEarthEnterpriseMetadata('http://www.earthenterprise.org/3d');
+    // var gee = new Cesium.GoogleEarthEnterpriseImageryProvider({
+    //     metadata : geeMetadata
+    // });
+    // var url = "http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali";
+    // var google = new Cesium.UrlTemplateImageryProvider({url:url});
+    //
+    //
+    // var viewer = new Cesium.Viewer("cesiumContainer", {
+    //   baseLayerPicker: false,
+    //   imageryProvider: google,
+    //   terrainProvider : Cesium.createWorldTerrain({
+    //     requestWaterMask : true,
+    //     requestVertexNormals : true
+    //   }),
+    // });
+    //
+    // // viewer.camera.setView({
+    // //   //北京上空
+    // //   destination : Cesium.Cartesian3.fromDegrees(116.39, 39.9, 15000000.0)
+    // // });
+    //
+    // viewer.camera.setView({
+    //     destination : new Cesium.Cartesian3(1332761, -4662399, 4137888),
+    //     orientation: {
+    //         heading : 0.607, // east, default value is 0.0 (north)
+    //         pitch : -0.666,    // default value (looking down)
+    //         roll : 0.0                             // default value
+    //     }
+    // });
+
+    var viewer = new Cesium.Viewer('cesiumContainer');
+    var promise=Cesium.GeoJsonDataSource.load('china.json');
+    var density = [3.61, 1.41, 4.58, 2.83, 12.88, 9.0, 7.48, 10.82, 13.96, 17.61, 13.45, 24.08, 12.12, 19.44, 17.55, 14.04, 24.7, 16.34, 23.73, 17.32, 15.13, 20.64, 17.12, 23.13, 27.69, 18.63, 9.75, 16.0, 25.3, 34.16, 33.84, 60.25, 80.4, 46.63];
+    var population = [2181, 300, 2471, 563, 8042, 3831, 2558, 4597, 4603, 6568, 3733, 10430, 2746, 7185, 5724, 3477, 9579, 4457, 9402, 4375, 3571, 5950, 3552, 5442, 7866, 2884, 630, 867, 2316, 1961, 1294, 2301, 710, 55];
+    promise.then(function(dataSource) {
+        viewer.dataSources.add(dataSource);
+        var entities = dataSource.entities.values;
+        var colorHash = {};
+        for (var i = 0; i < entities.length; i++) {
+            var entity = entities[i];
+            var name = entity.name;
+            //var density = entity.density;
+            var color = Cesium.Color.fromAlpha(Cesium.Color.RED, density[i]/81);
+
+            entity.polygon.material = color;
+            entity.polygon.outline = true;
+            entity.polygon.extrudedHeight = population[i];
+            entity.polygon.outlineColor = Cesium.Color.WHITE;
+            }
+        });
+    viewer.flyTo(promise);
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
